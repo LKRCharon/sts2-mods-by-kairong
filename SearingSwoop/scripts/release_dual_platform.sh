@@ -23,23 +23,19 @@ if [[ -z "${VERSION}" ]]; then
 fi
 
 BUILD_CONFIG="${1:-Release}"
-STAMP="$(date +%Y%m%d-%H%M%S)"
-DIST_ROOT="${PROJECT_DIR}/dist/${VERSION}-${STAMP}"
+DIST_ROOT="${PROJECT_DIR}/dist/${VERSION}"
 STAGE_ROOT="${DIST_ROOT}/stage"
 MODS_SINK="${STAGE_ROOT}/_mods_sink/"
-
-echo "[1/4] Building ${MOD_ID} (${BUILD_CONFIG})"
-DOTNET_ROLL_FORWARD=Major "${DOTNET_BIN}" build "${PROJECT_FILE}" -c "${BUILD_CONFIG}" "/p:ModsPath=${MODS_SINK}"
+BASELIB_MATRIX="${BASELIB_MATRIX:-3.0.3 3.0.5}"
+# shellcheck disable=SC2206
+BASELIB_VERSIONS=(${BASELIB_MATRIX})
+PLATFORMS=(mac win)
+RELEASE_FILES=()
 
 DLL_PATH="${PROJECT_DIR}/.godot/mono/temp/bin/${BUILD_CONFIG}/${MOD_ID}.dll"
 PCK_PATH="${PROJECT_DIR}/.godot/mono/temp/bin/${BUILD_CONFIG}/${MOD_ID}.pck"
 MANIFEST_PATH="${PROJECT_DIR}/${MOD_ID}.json"
 ASSET_DIR="${PROJECT_DIR}/${MOD_FOLDER_NAME}"
-
-if [[ ! -f "${DLL_PATH}" ]]; then
-  echo "missing build output: ${DLL_PATH}" >&2
-  exit 1
-fi
 
 if [[ ! -f "${MANIFEST_PATH}" ]]; then
   echo "missing manifest: ${MANIFEST_PATH}" >&2
@@ -52,11 +48,26 @@ if [[ ! -d "${ASSET_DIR}" ]]; then
 fi
 
 mkdir -p "${STAGE_ROOT}"
+find "${DIST_ROOT}" -maxdepth 1 -type f -name "${MOD_ID}-${VERSION}-*.zip" -delete 2>/dev/null || true
+
+build_one() {
+  local baselib_version="$1"
+  echo "[build] ${MOD_ID} (${BUILD_CONFIG}) with BaseLib ${baselib_version}"
+  DOTNET_ROLL_FORWARD=Major "${DOTNET_BIN}" build "${PROJECT_FILE}" -c "${BUILD_CONFIG}" \
+    "/p:ModsPath=${MODS_SINK}/${baselib_version}/" \
+    "/p:BaseLibVersion=${baselib_version}"
+}
 
 package_one() {
-  local platform="$1"
-  local stage_dir="${STAGE_ROOT}/${MOD_ID}-${platform}/${MOD_ID}"
-  local zip_path="${DIST_ROOT}/${MOD_ID}-${VERSION}-${platform}.zip"
+  local baselib_version="$1"
+  local platform="$2"
+  local stage_dir="${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}-${platform}/${MOD_ID}"
+  local zip_path="${DIST_ROOT}/${MOD_ID}-${VERSION}-baselib-${baselib_version}-${platform}.zip"
+
+  if [[ ! -f "${DLL_PATH}" ]]; then
+    echo "missing build output: ${DLL_PATH}" >&2
+    exit 1
+  fi
 
   mkdir -p "${stage_dir}"
   cp "${DLL_PATH}" "${stage_dir}/"
@@ -68,20 +79,24 @@ package_one() {
   fi
 
   (
-    cd "${STAGE_ROOT}/${MOD_ID}-${platform}"
+    cd "${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}-${platform}"
     zip -qry "${zip_path}" "${MOD_ID}"
   )
 
   echo "packaged: ${zip_path}"
+  RELEASE_FILES+=("${zip_path}")
 }
 
-echo "[2/4] Packaging mac build bundle"
-package_one "mac"
-
-echo "[3/4] Packaging win build bundle"
-package_one "win"
+echo "[1/4] Building and packaging matrix"
+for baselib_version in "${BASELIB_VERSIONS[@]}"; do
+  build_one "${baselib_version}"
+  for platform in "${PLATFORMS[@]}"; do
+    package_one "${baselib_version}" "${platform}"
+  done
+done
 
 echo "[4/4] Done"
 echo "Release bundles:"
-echo "  - ${DIST_ROOT}/${MOD_ID}-${VERSION}-mac.zip"
-echo "  - ${DIST_ROOT}/${MOD_ID}-${VERSION}-win.zip"
+for bundle in "${RELEASE_FILES[@]}"; do
+  echo "  - ${bundle}"
+done
