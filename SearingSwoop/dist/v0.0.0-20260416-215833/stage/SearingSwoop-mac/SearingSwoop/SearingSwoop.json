@@ -1,0 +1,11 @@
+{
+  "id": "SearingSwoop",
+  "name": "Searing Swoop",
+  "author": "kairong + Codex",
+  "description": "A Searing Blow-inspired Byrdonis Egg joke mod: keep hatching, add more Byrdpips, and scale the attack card upward.",
+  "version": "v0.0.0",
+  "has_pck": false,
+  "has_dll": true,
+  "dependencies": ["BaseLib"],
+  "affects_gameplay": true
+}

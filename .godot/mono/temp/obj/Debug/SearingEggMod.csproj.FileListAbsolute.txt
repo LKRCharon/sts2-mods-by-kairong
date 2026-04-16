@@ -1,0 +1,12 @@
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.csproj.AssemblyReference.cache
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.AssemblyInfoInputs.cache
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.AssemblyInfo.cs
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.csproj.CoreCompileInputs.cache
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/bin/Debug/SearingEggMod.deps.json
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/bin/Debug/SearingEggMod.dll
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/bin/Debug/SearingEggMod.pdb
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.dll
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/refint/SearingEggMod.dll
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/SearingEggMod.pdb
+/Users/kairong/project/sts2-mods-by-kairong/.godot/mono/temp/obj/Debug/ref/SearingEggMod.dll

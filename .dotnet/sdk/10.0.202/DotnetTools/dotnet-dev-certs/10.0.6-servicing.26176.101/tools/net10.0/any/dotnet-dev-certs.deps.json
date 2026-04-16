@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "dotnet-dev-certs/10.0.6-servicing.26176.101": {
+        "runtime": {
+          "dotnet-dev-certs.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "dotnet-dev-certs/10.0.6-servicing.26176.101": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

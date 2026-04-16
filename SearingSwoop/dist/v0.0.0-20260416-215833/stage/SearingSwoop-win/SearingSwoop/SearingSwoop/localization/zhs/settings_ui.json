@@ -1,0 +1,6 @@
+{
+  "SEARINGSWOOP-GENERAL.title": "通用",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.title": "启用 Mod 内容",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.title": "启用灼热扑击链",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.desc": "关闭后，新开局将不再加入灼热鸟蛋，byrdonis_nest 事件也会恢复原版行为。为了避免坏档，当前存档里已经存在的灼热鸟蛋和灼热扑击仍会保持可用。"
+}

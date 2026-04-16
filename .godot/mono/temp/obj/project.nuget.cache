@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "8aI0l9N6ZhI=",
+  "success": true,
+  "projectFilePath": "/Users/kairong/project/sts2-mods-by-kairong/SearingEggMod.csproj",
+  "expectedPackageFiles": [
+    "/Users/kairong/.nuget/packages/alchyr.sts2.baselib/3.0.3/alchyr.sts2.baselib.3.0.3.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/alchyr.sts2.modanalyzers/0.1.9/alchyr.sts2.modanalyzers.0.1.9.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/godot.sourcegenerators/4.5.1/godot.sourcegenerators.4.5.1.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/godotsharp/4.5.1/godotsharp.4.5.1.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/godotsharpeditor/4.5.1/godotsharpeditor.4.5.1.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/krafs.publicizer/2.3.0/krafs.publicizer.2.3.0.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/microsoft.netcore.app.ref/9.0.15/microsoft.netcore.app.ref.9.0.15.nupkg.sha512",
+    "/Users/kairong/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.15/microsoft.aspnetcore.app.ref.9.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}

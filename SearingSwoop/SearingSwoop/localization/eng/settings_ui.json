@@ -1,0 +1,6 @@
+{
+  "SEARINGSWOOP-GENERAL.title": "General",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.title": "Enable Mod Content",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.title": "Enable Searing Swoop",
+  "SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.desc": "When disabled, new runs will not start with Searing Egg and Byrdonis Nest will use vanilla behavior. Existing custom cards in the current run are left functional for save safety."
+}
