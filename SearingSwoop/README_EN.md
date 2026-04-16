@@ -2,6 +2,20 @@
 
 A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
+## Version & Compatibility
+
+- Current mod version: `v0.1.0`
+- Target game version: `Slay the Spire 2 v0.99.1`
+- Supported BaseLib versions: `3.0.3` / `3.0.5`
+
+## Dependency
+
+- This mod requires `BaseLib` at runtime.
+- Install a compatible `BaseLib` version before enabling `SearingSwoop`.
+- The game's `mods` directory should contain both:
+  - `BaseLib`
+  - `SearingSwoop`
+
 ## What This Mod Adds
 
 - Two custom cards:
@@ -24,6 +38,12 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 - Expose "start with egg" and "replace vanilla egg event" as separate config options.
 
+## Installation
+
+1. Install `BaseLib` first, using version `3.0.3` or `3.0.5`.
+2. Put the extracted `SearingSwoop` folder into the game's `mods` directory.
+3. Launch the game and enable both `BaseLib` and `SearingSwoop`.
+
 ## Release (mac + win)
 
 Before publishing:
@@ -35,5 +55,7 @@ cd /Users/kairong/project/sts2-mods-by-kairong/SearingSwoop
 
 The script outputs:
 
-- `dist/<version>-<timestamp>/SearingSwoop-<version>-mac.zip`
-- `dist/<version>-<timestamp>/SearingSwoop-<version>-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-win.zip`

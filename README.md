@@ -11,6 +11,17 @@ This repository is intended to host multiple mods over time.
 
 Theme: a Searing Blow-style joke progression built on the Byrdonis Egg route.
 
+Compatibility:
+
+- Mod version: `v0.1.0`
+- Game version: `Slay the Spire 2 v0.99.1`
+- BaseLib: `3.0.3` / `3.0.5`
+
+Dependency:
+
+- `SearingSwoop` requires `BaseLib` at runtime.
+- Install the matching `BaseLib` release in the game's `mods` folder before enabling this mod.
+
 Main gameplay loop:
 
 - Adds two custom cards: `Searing Egg` and `Searing Swoop`.
@@ -25,13 +36,18 @@ Note:
 
 ## Installation (Players)
 
-1. Download the latest release zip for your platform (`mac` or `win`).
-2. Extract the `SearingSwoop` folder.
-3. Copy it into the game's `mods` directory.
-4. Launch the game and enable the mod.
-5. Restart the game after changing mod config toggles.
+This mod does not run standalone. `BaseLib` must already be installed in the game's `mods` directory.
+
+1. Install `BaseLib` first, using a version compatible with this mod: `3.0.3` or `3.0.5`.
+2. Download the latest `SearingSwoop` release zip for your platform (`mac` or `win`).
+3. Extract the `SearingSwoop` folder.
+4. Copy it into the game's `mods` directory alongside `BaseLib`.
+5. Launch the game and enable the mod.
+6. Restart the game after changing mod config toggles.
 
 ## Development
+
+The active mod currently depends on the `Alchyr.Sts2.BaseLib` NuGet package and on `BaseLib` being present as a runtime mod dependency.
 
 Project structure currently includes:
 
@@ -49,8 +65,10 @@ From the `SearingSwoop` directory:
 
 It generates:
 
-- `dist/<version>-<timestamp>/SearingSwoop-<version>-mac.zip`
-- `dist/<version>-<timestamp>/SearingSwoop-<version>-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-win.zip`
 
 ## Roadmap
 
