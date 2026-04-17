@@ -14,7 +14,8 @@ public class SearingSwoopCard() : SearingEventCard(0, CardType.Attack, CardRarit
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(14, ValueProp.Move)
+        new DamageVar(14, ValueProp.Move),
+        new RepeatVar(1)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -27,6 +28,7 @@ public class SearingSwoopCard() : SearingEventCard(0, CardType.Attack, CardRarit
         float attackAnimDelay = Owner?.Character?.AttackAnimDelay ?? 0f;
 
         DynamicVars.Damage.BaseValue = damage;
+        DynamicVars.Repeat.BaseValue = totalHits;
         MainFile.Logger.Info($"Playing Searing Swoop for player {Owner?.NetId}. Upgrade level: {CurrentUpgradeLevel}. Damage per hit: {damage}. Total hits: {totalHits}. Bird pets found: {birds.Count}.");
 
         for (int i = 0; i < totalHits; i++)

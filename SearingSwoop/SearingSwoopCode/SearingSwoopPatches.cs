@@ -34,8 +34,6 @@ internal static class SearingSwoopState
         new(() => Array.Empty<int>(), "SearingSwoop_HatchSkinIndices");
 
     private const string ByrdpipPluralRelicTitleLocKey = "SEARING_SWOOP_BYRDPIP_PLURAL.title";
-    private const string EggDescriptionLocKey = "SEARING_SWOOP_EGG.description";
-    private const string SwoopDescriptionLocKey = "SEARING_SWOOP_SWOOP.description";
     private const string ByrdpipDescriptionLocKey = "SEARING_SWOOP_BYRDPIP.description";
 
     private static readonly SpireField<Player, Queue<string>> PendingBirdSkins =
@@ -403,19 +401,6 @@ internal static class SearingSwoopState
         return new LocString("relics", ByrdpipPluralRelicTitleLocKey);
     }
 
-    internal static LocString EggDescriptionLocString()
-    {
-        EnsureCustomCardLocalization();
-        return new LocString("cards", EggDescriptionLocKey);
-    }
-
-    internal static string EggDescription()
-    {
-        return IsChinese()
-            ? "能在[gold]休息处[/gold]被[gold]多次[/gold]孵化。"
-            : "Can be hatched [gold]multiple times[/gold] at a [gold]Rest Site[/gold].";
-    }
-
     internal static string SwoopTitle(SearingSwoopCard? card)
     {
         int upgradeLevel = Math.Max(0, card?.CurrentUpgradeLevel ?? 0);
@@ -423,28 +408,26 @@ internal static class SearingSwoopState
         return upgradeLevel <= 0 ? baseTitle : $"{baseTitle}+{upgradeLevel}";
     }
 
-    internal static string SwoopDescription(SearingSwoopCard card, bool previewNextUpgrade = false)
-    {
-        TrySyncSwoopDamage(card);
-        int shownUpgradeLevel = Math.Max(0, card.CurrentUpgradeLevel + (previewNextUpgrade ? 1 : 0));
-        string damage = GetSwoopDamageForUpgradeLevel(shownUpgradeLevel).ToString();
-        int hits = TryGetExpectedBirdCount(card);
-
-        return IsChinese()
-            ? $"造成{damage}点伤害[orange]{hits}[/orange]次。"
-            : $"Deal {damage} damage [orange]{hits}[/orange] times.";
-    }
-
-    private static void TrySyncSwoopDamage(SearingSwoopCard card)
+    internal static void SyncSwoopDisplayVars(SearingSwoopCard card, bool previewNextUpgrade = false)
     {
         try
         {
-            SyncSwoopDamage(card);
+            int shownUpgradeLevel = Math.Max(0, card.CurrentUpgradeLevel + (previewNextUpgrade ? 1 : 0));
+            int expectedDamage = GetSwoopDamageForUpgradeLevel(shownUpgradeLevel);
+            if (card.DynamicVars.Damage.BaseValue != expectedDamage)
+            {
+                card.DynamicVars.Damage.BaseValue = expectedDamage;
+            }
+
+            int expectedHits = TryGetExpectedBirdCount(card);
+            if (card.DynamicVars.Repeat.BaseValue != expectedHits)
+            {
+                card.DynamicVars.Repeat.BaseValue = expectedHits;
+            }
         }
         catch (Exception ex) when (IsCanonicalCardAccessException(ex))
         {
-            // Card library / compendium can ask for canonical card descriptions.
-            // Those cards have no mutable owner context, so sync is intentionally skipped.
+            // Card compendium can request canonical descriptions without mutable owner context.
         }
     }
 
@@ -465,12 +448,6 @@ internal static class SearingSwoopState
         return ex.GetType().Name.Contains("CanonicalModelException", StringComparison.Ordinal);
     }
 
-    internal static LocString SwoopDescriptionLocString(SearingSwoopCard card)
-    {
-        EnsureCustomCardLocalization(card);
-        return new LocString("cards", SwoopDescriptionLocKey);
-    }
-
     internal static string ByrdpipDescription()
     {
         return IsChinese()
@@ -482,26 +459,6 @@ internal static class SearingSwoopState
     {
         EnsureCustomRelicLocalization();
         return new LocString("relics", ByrdpipDescriptionLocKey);
-    }
-
-    internal static void EnsureCustomCardLocalization(SearingSwoopCard? swoop = null)
-    {
-        if (LocManager.Instance == null)
-        {
-            return;
-        }
-
-        LocTable cardsTable = LocManager.Instance.GetTable("cards");
-        Dictionary<string, string> translations =
-            AccessTools.Field(typeof(LocTable), "_translations").GetValue(cardsTable) as Dictionary<string, string>
-            ?? throw new InvalidOperationException("Failed to access card localization table.");
-
-        translations[EggDescriptionLocKey] = EggDescription();
-        translations[SwoopDescriptionLocKey] = swoop == null
-            ? (IsChinese()
-                ? "造成14点伤害[orange]1[/orange]次。"
-                : "Deal 14 damage [orange]1[/orange] times.")
-            : SwoopDescription(swoop);
     }
 
     internal static void EnsureCustomRelicLocalization()
@@ -922,17 +879,12 @@ internal static class SearingCardDescriptionLocPatch
 {
     private static bool Prefix(CardModel __instance, ref LocString __result)
     {
-        switch (__instance)
+        if (__instance is SearingSwoopCard swoop)
         {
-            case SearingEggCard:
-                __result = SearingSwoopState.EggDescriptionLocString();
-                return false;
-            case SearingSwoopCard swoop:
-                __result = SearingSwoopState.SwoopDescriptionLocString(swoop);
-                return false;
-            default:
-                return true;
+            SearingSwoopState.SyncSwoopDisplayVars(swoop);
         }
+
+        return true;
     }
 }
 
@@ -941,17 +893,12 @@ internal static class SearingCardDescriptionPatch
 {
     private static bool Prefix(CardModel __instance, PileType pileType, Creature? target, ref string __result)
     {
-        switch (__instance)
+        if (__instance is SearingSwoopCard swoop)
         {
-            case SearingEggCard:
-                __result = SearingSwoopState.EggDescription();
-                return false;
-            case SearingSwoopCard swoop:
-                __result = SearingSwoopState.SwoopDescription(swoop);
-                return false;
-            default:
-                return true;
+            SearingSwoopState.SyncSwoopDisplayVars(swoop);
         }
+
+        return true;
     }
 }
 
@@ -960,17 +907,12 @@ internal static class SearingCardUpgradeDescriptionPatch
 {
     private static bool Prefix(CardModel __instance, ref string __result)
     {
-        switch (__instance)
+        if (__instance is SearingSwoopCard swoop)
         {
-            case SearingEggCard:
-                __result = SearingSwoopState.EggDescription();
-                return false;
-            case SearingSwoopCard swoop:
-                __result = SearingSwoopState.SwoopDescription(swoop, previewNextUpgrade: true);
-                return false;
-            default:
-                return true;
+            SearingSwoopState.SyncSwoopDisplayVars(swoop, previewNextUpgrade: true);
         }
+
+        return true;
     }
 }
 
@@ -979,19 +921,15 @@ internal static class SearingCardMaxUpgradePatch
 {
     private static bool Prefix(CardModel __instance, ref int __result)
     {
-        switch (__instance)
+        if (__instance is not SearingSwoopCard swoop)
         {
-            case SearingEggCard egg:
-                __result = egg.CurrentUpgradeLevel;
-                return false;
-            case SearingSwoopCard swoop:
-                __result = SearingSwoopState.CanBypassSwoopUpgradeLock()
-                    ? int.MaxValue / 4
-                    : swoop.CurrentUpgradeLevel;
-                return false;
-            default:
-                return true;
+            return true;
         }
+
+        __result = SearingSwoopState.CanBypassSwoopUpgradeLock()
+            ? int.MaxValue / 4
+            : swoop.CurrentUpgradeLevel;
+        return false;
     }
 }
 

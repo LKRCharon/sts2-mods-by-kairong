@@ -4,7 +4,7 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 ## Version & Compatibility
 
-- Current mod version: `v0.1.1`
+- Current mod version: `v0.3`
 - Target game version: `Slay the Spire 2 v0.103.2`
 - Supported BaseLib versions: `3.0.3` / `3.0.5`
 
@@ -33,6 +33,12 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 ## Card Art
 
 - The two active mod card portraits (`Searing Egg` and `Searing Swoop`) are GPT-generated.
+
+## v0.3 Updates
+
+- Fixed `Searing Swoop` card text being stuck at flat `14` damage on display.
+- Card description now uses dynamic vars, so battle-time modifiers (for example Strength and Vulnerable) are reflected in displayed damage.
+- Hit count display now uses a dynamic var and tracks current Byrdpip count.
 
 ## TODO
 

@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Last updated: 2026-04-16
+Last updated: 2026-04-17
 
 ## Repo Status
 
@@ -10,10 +10,10 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 
 `SearingSwoop`
 
-- Mod version: `v0.1.0`
-- Target game version: `Slay the Spire 2 v0.99.1`
+- Mod version: `v0.3`
+- Target game version: `Slay the Spire 2 v0.103.2`
 - Supported BaseLib versions: `3.0.3` and `3.0.5`
-- Current status: playable prototype with release packaging
+- Current status: playable mod with release packaging and GitHub Releases workflow
 
 ## Implemented
 
@@ -25,6 +25,7 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - Granted Byrdpip companions based on hatch progression.
 - Added repeated upgrade handling for `Searing Swoop`.
 - Patched dynamic card titles and descriptions so they reflect current hatch state.
+- Fixed `Searing Swoop` description rendering to use dynamic vars (`{Damage:diff()}` and `{Repeat:diff()}`), so card text reflects live combat modifiers and current hit count.
 - Patched relic counter, title, description, and bird skin setup.
 - Added runtime portrait loading so custom portraits can be loaded from disk reliably.
 - Added release packaging script that emits zip bundles for both supported BaseLib versions.
@@ -37,9 +38,8 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - Actual code only exposes one config switch:
   - `EnableModContent`
 
-- `Searing Swoop` is framed as repeated forging / scaling progression.
-- Current method `GetSwoopDamageForUpgradeLevel()` returns a constant `14`.
-  This means upgrade progression is currently reflected more in naming and flow than in raw damage scaling.
+- `Searing Swoop` currently keeps per-hit base damage fixed at `14`.
+- Progression is primarily from repeated hatches increasing hit count (bird count), not from per-hit base damage growth.
 
 ## Technical Debt
 
@@ -66,7 +66,7 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 1. Split the single config toggle into two explicit settings:
    - start with egg
    - replace vanilla event
-2. Decide the intended upgrade scaling for `Searing Swoop` and implement it in `GetSwoopDamageForUpgradeLevel()`.
+2. Decide whether to keep fixed per-hit damage (`14`) or introduce hatch-based per-hit scaling in `GetSwoopDamageForUpgradeLevel()`.
 3. Break `SearingSwoopPatches.cs` into smaller files by concern.
 4. Document a reliable local dev setup for STS2 path overrides and Godot publish prerequisites.
 5. Add a lightweight smoke-check routine for future changes:

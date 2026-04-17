@@ -2,5 +2,5 @@
   "SEARINGSWOOP-SEARING_EGG_CARD.title": "灼热鸟蛋",
   "SEARINGSWOOP-SEARING_EGG_CARD.description": "能在[gold]休息处[/gold]被[gold]多次[/gold]孵化。",
   "SEARINGSWOOP-SEARING_SWOOP_CARD.title": "灼热扑击",
-  "SEARINGSWOOP-SEARING_SWOOP_CARD.description": "造成14点伤害1次。"
+  "SEARINGSWOOP-SEARING_SWOOP_CARD.description": "造成{Damage:diff()}点伤害[orange]{Repeat:diff()}[/orange]次。"
 }
