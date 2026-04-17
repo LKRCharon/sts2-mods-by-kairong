@@ -4,8 +4,8 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 ## Version & Compatibility
 
-- Current mod version: `v0.1.0`
-- Target game version: `Slay the Spire 2 v0.99.1`
+- Current mod version: `v0.1.1`
+- Target game version: `Slay the Spire 2 v0.103.2`
 - Supported BaseLib versions: `3.0.3` / `3.0.5`
 
 ## Dependency

@@ -15,6 +15,8 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.Random;
 using SearingSwoop.SearingSwoopCode.Cards;
@@ -190,6 +192,22 @@ internal static class SearingSwoopState
     }
 
     internal static bool CanUseDeserializeSwoopUpgrade() => _allowSwoopDeserializeUpgrades > 0;
+
+    internal static bool CanBypassSwoopUpgradeLock() =>
+        CanUseInternalSwoopUpgrade() || CanUseDeserializeSwoopUpgrade();
+
+    internal static int GetLockedSwoopUpgradeLevel(SearingSwoopCard card)
+    {
+        try
+        {
+            // Searing Swoop level is determined by hatch count, not by generic upgrade mechanics.
+            return Math.Max(0, GetHatchCount(card.Owner) - 1);
+        }
+        catch (Exception ex) when (IsCanonicalCardAccessException(ex))
+        {
+            return 0;
+        }
+    }
 
     internal static string DescribeBirdChainState(Player? player)
     {
@@ -394,8 +412,8 @@ internal static class SearingSwoopState
     internal static string EggDescription()
     {
         return IsChinese()
-            ? "无法打出。 在篝火处可孵化。"
-            : "Unplayable. Hatch it at campfires.";
+            ? "能在[gold]休息处[/gold]被[gold]多次[/gold]孵化。"
+            : "Can be hatched [gold]multiple times[/gold] at a [gold]Rest Site[/gold].";
     }
 
     internal static string SwoopTitle(SearingSwoopCard? card)
@@ -413,7 +431,7 @@ internal static class SearingSwoopState
         int hits = TryGetExpectedBirdCount(card);
 
         return IsChinese()
-            ? $"造成 {damage} 点伤害 [orange]{hits}[/orange] 次。"
+            ? $"造成{damage}点伤害[orange]{hits}[/orange]次。"
             : $"Deal {damage} damage [orange]{hits}[/orange] times.";
     }
 
@@ -481,7 +499,7 @@ internal static class SearingSwoopState
         translations[EggDescriptionLocKey] = EggDescription();
         translations[SwoopDescriptionLocKey] = swoop == null
             ? (IsChinese()
-                ? "造成 14 点伤害 [orange]1[/orange] 次。"
+                ? "造成14点伤害[orange]1[/orange]次。"
                 : "Deal 14 damage [orange]1[/orange] times.")
             : SwoopDescription(swoop);
     }
@@ -779,7 +797,7 @@ internal static class ByrdpipTitlePatch
     }
 }
 
-[HarmonyPatch(typeof(RelicModel), nameof(RelicModel.Description), MethodType.Getter)]
+[HarmonyPatch(typeof(RelicModel), "Description", MethodType.Getter)]
 internal static class ByrdpipDescriptionPatch
 {
     private static bool Prefix(RelicModel __instance, ref LocString __result)
@@ -823,6 +841,60 @@ internal static class ByrdpipSetupSkinsPatch
         }
 
         relic.Skin = __state;
+    }
+}
+
+[HarmonyPatch(typeof(NCombatRoom), nameof(NCombatRoom.PositionPlayersAndPets))]
+internal static class ByrdpipPositionSpreadPatch
+{
+    // Keep vanilla layout as baseline, then add a small right-side expansion.
+    private const float RightEdgeExpansionPixels = 36f;
+
+    private static void Postfix(List<NCreature> creatureNodes)
+    {
+        if (creatureNodes == null || creatureNodes.Count == 0)
+        {
+            return;
+        }
+
+        List<NCreature> byrdNodes = creatureNodes
+            .Where(IsByrdPetNode)
+            .OrderBy(node => node.Position.X)
+            .ToList();
+
+        if (byrdNodes.Count <= 1)
+        {
+            return;
+        }
+
+        float minBefore = byrdNodes.Min(node => node.Position.X);
+        float maxBefore = byrdNodes.Max(node => node.Position.X);
+        float widthBefore = maxBefore - minBefore;
+        if (widthBefore <= 0.01f)
+        {
+            return;
+        }
+
+        float scale = (widthBefore + RightEdgeExpansionPixels) / widthBefore;
+        foreach (NCreature node in byrdNodes)
+        {
+            float relativeX = node.Position.X - minBefore;
+            float expandedX = minBefore + (relativeX * scale);
+            node.Position = node.Position with { X = expandedX };
+        }
+
+        float minAfter = byrdNodes.Min(node => node.Position.X);
+        float maxAfter = byrdNodes.Max(node => node.Position.X);
+        MainFile.Logger.Info(
+            $"Byrdpip position range adjusted (count={byrdNodes.Count}): X [{minBefore:0.##}, {maxBefore:0.##}] -> [{minAfter:0.##}, {maxAfter:0.##}], right expansion={RightEdgeExpansionPixels:0.##}.");
+    }
+
+    private static bool IsByrdPetNode(NCreature node)
+    {
+        Creature? entity = node.Entity;
+        return entity?.IsPet == true
+            && entity.PetOwner != null
+            && entity.Monster is MonsterByrdpip;
     }
 }
 
@@ -902,21 +974,6 @@ internal static class SearingCardUpgradeDescriptionPatch
     }
 }
 
-[HarmonyPatch(typeof(CardModel), "IsPlayable", MethodType.Getter)]
-internal static class SearingEggPlayablePatch
-{
-    private static bool Prefix(CardModel __instance, ref bool __result)
-    {
-        if (__instance is not SearingEggCard)
-        {
-            return true;
-        }
-
-        __result = false;
-        return false;
-    }
-}
-
 [HarmonyPatch(typeof(CardModel), nameof(CardModel.MaxUpgradeLevel), MethodType.Getter)]
 internal static class SearingCardMaxUpgradePatch
 {
@@ -928,13 +985,40 @@ internal static class SearingCardMaxUpgradePatch
                 __result = egg.CurrentUpgradeLevel;
                 return false;
             case SearingSwoopCard swoop:
-                __result = SearingSwoopState.CanUseInternalSwoopUpgrade() || SearingSwoopState.CanUseDeserializeSwoopUpgrade()
+                __result = SearingSwoopState.CanBypassSwoopUpgradeLock()
                     ? int.MaxValue / 4
                     : swoop.CurrentUpgradeLevel;
                 return false;
             default:
                 return true;
         }
+    }
+}
+
+[HarmonyPatch(typeof(CardModel), nameof(CardModel.CurrentUpgradeLevel), MethodType.Setter)]
+internal static class SearingSwoopUpgradeLevelLockPatch
+{
+    private static void Prefix(CardModel __instance, ref int value)
+    {
+        if (__instance is not SearingSwoopCard swoop)
+        {
+            return;
+        }
+
+        if (SearingSwoopState.CanBypassSwoopUpgradeLock())
+        {
+            return;
+        }
+
+        int lockedLevel = SearingSwoopState.GetLockedSwoopUpgradeLevel(swoop);
+        if (value == lockedLevel)
+        {
+            return;
+        }
+
+        MainFile.Logger.Info(
+            $"Blocked external Searing Swoop level change: requested={value}, locked={lockedLevel}, owner={swoop.Owner?.NetId.ToString() ?? "null"}.");
+        value = lockedLevel;
     }
 }
 

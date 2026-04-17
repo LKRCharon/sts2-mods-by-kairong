@@ -13,8 +13,8 @@ Theme: a Searing Blow-style joke progression built on the Byrdonis Egg route.
 
 Compatibility:
 
-- Mod version: `v0.1.0`
-- Game version: `Slay the Spire 2 v0.99.1`
+- Mod version: `v0.1.1`
+- Game version: `Slay the Spire 2 v0.103.2`
 - BaseLib: `3.0.3` / `3.0.5`
 
 Dependency:

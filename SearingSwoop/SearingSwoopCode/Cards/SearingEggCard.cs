@@ -4,8 +4,10 @@ using MegaCrit.Sts2.Core.Entities.RestSite;
 
 namespace SearingSwoop.SearingSwoopCode.Cards;
 
-public class SearingEggCard() : SearingEventCard(0, CardType.Quest, CardRarity.Quest, TargetType.None)
+public class SearingEggCard() : SearingEventCard(-1, CardType.Quest, CardRarity.Quest, TargetType.None)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Unplayable];
+
     public override bool TryModifyRestSiteOptions(Player player, ICollection<RestSiteOption> options)
     {
         if (player != Owner)
