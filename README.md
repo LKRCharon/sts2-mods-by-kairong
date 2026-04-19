@@ -13,9 +13,9 @@ Theme: a Searing Blow-style joke progression built on the Byrdonis Egg route.
 
 Compatibility:
 
-- Mod version: `v0.3`
+- Mod version: `v0.4`
 - Game version: `Slay the Spire 2 v0.103.2`
-- BaseLib: `3.0.3` / `3.0.5`
+- BaseLib: `3.0.6`
 
 Dependency:
 
@@ -38,7 +38,7 @@ Note:
 
 This mod does not run standalone. `BaseLib` must already be installed in the game's `mods` directory.
 
-1. Install `BaseLib` first, using a version compatible with this mod: `3.0.3` or `3.0.5`.
+1. Install `BaseLib` first, using a version compatible with this mod: `3.0.6`.
 2. Download the latest `SearingSwoop` release zip for your platform (`mac` or `win`).
 3. Extract the `SearingSwoop` folder.
 4. Copy it into the game's `mods` directory alongside `BaseLib`.
@@ -65,10 +65,8 @@ From the `SearingSwoop` directory:
 
 It generates:
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-win.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`
 
 ## Roadmap
 

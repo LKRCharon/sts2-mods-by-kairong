@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Last updated: 2026-04-17
+Last updated: 2026-04-19
 
 ## Repo Status
 
@@ -10,9 +10,9 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 
 `SearingSwoop`
 
-- Mod version: `v0.3`
+- Mod version: `v0.4`
 - Target game version: `Slay the Spire 2 v0.103.2`
-- Supported BaseLib versions: `3.0.3` and `3.0.5`
+- Supported BaseLib version: `3.0.6`
 - Current status: playable mod with release packaging and GitHub Releases workflow
 
 ## Implemented
@@ -28,7 +28,7 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - Fixed `Searing Swoop` description rendering to use dynamic vars (`{Damage:diff()}` and `{Repeat:diff()}`), so card text reflects live combat modifiers and current hit count.
 - Patched relic counter, title, description, and bird skin setup.
 - Added runtime portrait loading so custom portraits can be loaded from disk reliably.
-- Added release packaging script that emits zip bundles for both supported BaseLib versions.
+- Added release packaging script that emits zip bundles for mac/win using BaseLib 3.0.6.
 
 ## Partially Implemented Or Mismatched
 
@@ -58,7 +58,7 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - There is no automated regression coverage.
   Manual in-game verification is still the main safety net.
 
-- Release packaging is matrix-labeled for `mac` and `win`, but the current script mostly packages the local build output into different bundle names.
+- Release packaging is labeled for `mac` and `win`, but the current script mostly packages the local build output into different bundle names.
   Treat this as packaging convenience, not as fully validated cross-platform export.
 
 ## Immediate Priorities

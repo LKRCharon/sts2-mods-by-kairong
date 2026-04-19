@@ -4,9 +4,9 @@
 
 ## 版本与兼容
 
-- 当前模组版本：`v0.3`
+- 当前模组版本：`v0.4`
 - 适配游戏版本：`Slay the Spire 2 v0.103.2`
-- 可选 BaseLib 版本：`3.0.3` / `3.0.5`
+- BaseLib 版本：`3.0.6`
 
 ## 依赖
 
@@ -34,8 +34,10 @@
 
 - 当前两张 mod 卡图（`灼热鸟蛋`、`灼热扑击`）由 GPT 生成。
 
-## v0.3 更新
+## v0.4 更新
 
+- 依赖更新为 `BaseLib 3.0.6`。
+- 发布包改为单一 BaseLib 版本，减少安装混淆。
 - 修复 `灼热扑击` 卡面伤害显示固定为 `14` 的问题。
 - 现在卡面描述使用动态变量：会正确显示力量、易伤等战斗内补正后的伤害数值。
 - 卡面命中次数改为动态变量显示，与当前异鸟数量保持一致。
@@ -46,7 +48,7 @@
 
 ## 安装
 
-1. 先安装 `BaseLib`，版本使用 `3.0.3` 或 `3.0.5`
+1. 先安装 `BaseLib`，版本使用 `3.0.6`
 2. 再把 `SearingSwoop` 解压后的文件夹放进游戏 `mods` 目录
 3. 启动游戏后同时启用 `BaseLib` 和 `SearingSwoop`
 
@@ -61,7 +63,5 @@ cd /Users/kairong/project/sts2-mods-by-kairong/SearingSwoop
 
 脚本会生成：
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-win.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`

@@ -4,9 +4,9 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 ## Version & Compatibility
 
-- Current mod version: `v0.3`
+- Current mod version: `v0.4`
 - Target game version: `Slay the Spire 2 v0.103.2`
-- Supported BaseLib versions: `3.0.3` / `3.0.5`
+- Supported BaseLib version: `3.0.6`
 
 ## Dependency
 
@@ -34,8 +34,10 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 - The two active mod card portraits (`Searing Egg` and `Searing Swoop`) are GPT-generated.
 
-## v0.3 Updates
+## v0.4 Updates
 
+- Updated runtime dependency target to `BaseLib 3.0.6`.
+- Simplified release bundles to one BaseLib target version to reduce install confusion.
 - Fixed `Searing Swoop` card text being stuck at flat `14` damage on display.
 - Card description now uses dynamic vars, so battle-time modifiers (for example Strength and Vulnerable) are reflected in displayed damage.
 - Hit count display now uses a dynamic var and tracks current Byrdpip count.
@@ -46,7 +48,7 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 
 ## Installation
 
-1. Install `BaseLib` first, using version `3.0.3` or `3.0.5`.
+1. Install `BaseLib` first, using version `3.0.6`.
 2. Put the extracted `SearingSwoop` folder into the game's `mods` directory.
 3. Launch the game and enable both `BaseLib` and `SearingSwoop`.
 
@@ -61,7 +63,5 @@ cd /Users/kairong/project/sts2-mods-by-kairong/SearingSwoop
 
 The script outputs:
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.3-win.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.5-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`

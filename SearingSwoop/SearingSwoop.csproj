@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <BaseLibVersion Condition="'$(BaseLibVersion)' == ''">3.0.3</BaseLibVersion>
+        <BaseLibVersion Condition="'$(BaseLibVersion)' == ''">3.0.6</BaseLibVersion>
     </PropertyGroup>
 
     <ItemGroup Condition="Exists('$(Sts2DataDir)')" >
