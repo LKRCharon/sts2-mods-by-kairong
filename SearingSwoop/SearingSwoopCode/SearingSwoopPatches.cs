@@ -27,6 +27,26 @@ namespace SearingSwoop.SearingSwoopCode;
 
 internal static class SearingSwoopState
 {
+    private sealed record ModLocPair(string English, string Chinese);
+
+    private static readonly Dictionary<string, ModLocPair> ModLocalizationFallbacks = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["SEARINGSWOOP-SEARING_EGG_CARD.title"] = new("Searing Egg", "灼热鸟蛋"),
+        ["SEARINGSWOOP-SEARING_EGG_CARD.description"] = new(
+            "Can be hatched [gold]multiple times[/gold] at a [gold]Rest Site[/gold].",
+            "能在[gold]休息处[/gold]被[gold]多次[/gold]孵化。"),
+        ["SEARINGSWOOP-SEARING_SWOOP_CARD.title"] = new("Searing Swoop", "灼热扑击"),
+        ["SEARINGSWOOP-SEARING_SWOOP_CARD.description"] = new(
+            "Deal {Damage:diff()} damage [orange]{Repeat:diff()}[/orange] times.",
+            "造成{Damage:diff()}点伤害[orange]{Repeat:diff()}[/orange]次。"),
+        ["SEARINGSWOOP-GENERAL.title"] = new("General", "通用"),
+        ["SEARINGSWOOP-ENABLE_MOD_CONTENT.title"] = new("Enable Mod Content", "启用 Mod 内容"),
+        ["SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.title"] = new("Enable Searing Swoop", "启用灼热扑击链"),
+        ["SEARINGSWOOP-ENABLE_MOD_CONTENT.hover.desc"] = new(
+            "When disabled, new runs will not start with Searing Egg and Byrdonis Nest will use vanilla behavior. Existing custom cards in the current run are left functional for save safety.",
+            "关闭后，新开局将不再加入灼热鸟蛋，byrdonis_nest 事件也会恢复原版行为。为了避免坏档，当前存档里已经存在的灼热鸟蛋和灼热扑击仍会保持可用。")
+    };
+
     internal static readonly SavedSpireField<RelicByrdpip, int> HatchCount =
         new(() => 0, "SearingSwoop_HatchCount");
 
@@ -390,7 +410,30 @@ internal static class SearingSwoopState
     internal static bool IsChinese()
     {
         string? language = LocManager.Instance?.Language;
-        return language is "zhs" or "zh_CN" or "zh-CN";
+        if (string.IsNullOrWhiteSpace(language))
+        {
+            return false;
+        }
+
+        string normalized = language.Replace('-', '_').ToLowerInvariant();
+        return normalized.StartsWith("zh", StringComparison.Ordinal);
+    }
+
+    internal static bool TryGetModLocalizedFallback(string key, out string value)
+    {
+        value = string.Empty;
+        if (string.IsNullOrWhiteSpace(key) || !key.StartsWith("SEARINGSWOOP-", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (!ModLocalizationFallbacks.TryGetValue(key, out ModLocPair? pair))
+        {
+            return false;
+        }
+
+        value = IsChinese() ? pair.Chinese : pair.English;
+        return true;
     }
 
     internal static string EggTitle() => IsChinese() ? "灼热鸟蛋" : "Searing Egg";
@@ -913,6 +956,21 @@ internal static class SearingCardUpgradeDescriptionPatch
         }
 
         return true;
+    }
+}
+
+[HarmonyPatch(typeof(LocTable), nameof(LocTable.GetRawText), [typeof(string)])]
+internal static class SearingModLocalizationFallbackPatch
+{
+    private static bool Prefix(string key, ref string __result)
+    {
+        if (!SearingSwoopState.TryGetModLocalizedFallback(key, out string fallback))
+        {
+            return true;
+        }
+
+        __result = fallback;
+        return false;
     }
 }
 

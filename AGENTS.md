@@ -20,6 +20,8 @@ Default assumption for future work: if a task does not explicitly say otherwise,
 - `_baselib/`: BaseLib source mirror / reference area. Treat as upstream reference unless a task explicitly targets it.
 - `_template/`: template resources for future mods. Do not casually edit when working on `SearingSwoop`.
 - `extracted-card-art/`: source art workspace, not core runtime logic.
+- `local-mod-study/`: local-only workspace for downloading/decompiling third-party mods for learning.
+- `LOCAL_TOOLING.md`: local reverse-engineering/tooling setup notes (`ilspycmd`, `.NET 10 runtime`).
 
 ## Current Mod Architecture
 
@@ -46,9 +48,13 @@ Implication: before adding new behavior, check whether it truly belongs in the e
 - When adding new player-facing strings, decide whether they are:
   - static text that belongs in localization JSON, or
   - dynamic text that must stay patched at runtime.
-- Preserve support for BaseLib `3.0.3` and `3.0.5` unless the task explicitly changes the compatibility target.
+- Current default dependency target is BaseLib `3.0.6`.
+- If widening compatibility claims (for example `3.0.3+`), verify by actual cross-version builds first.
 - Avoid editing `_baselib/` or `_template/` as part of normal mod work.
 - Do not commit release artifacts or editor/build outputs.
+- Do not publish BaseLib-bundled convenience packages to any public channel (GitHub/Nexus/etc.).
+- BaseLib-bundled packages are allowed for local/offline friend sharing only.
+- Default release strategy is a single cross-platform mod package (not separate mac/win packages) unless a task explicitly requires platform split.
 
 ## Build And Release
 
@@ -76,6 +82,14 @@ Release packaging from `SearingSwoop/`:
 
 This produces zip bundles under `SearingSwoop/dist/<version>/`.
 
+### Public vs Local Packaging Policy
+
+- Public releases should contain only `SearingSwoop` files, with BaseLib declared as an external dependency.
+- Public channel default: upload one package per version for `SearingSwoop` (cross-platform), and avoid redundant `-mac`/`-win` duplicates when payload is identical.
+- A local convenience archive containing both `BaseLib/` and `SearingSwoop/` may be created for direct friend sharing, but must remain local and must not be uploaded publicly.
+- If generated, the local convenience archive should use an explicit local-only name (for example `searingSwoopwithBaselib.zip`) and stay outside public release assets.
+- When publishing to Nexus, prefer one mod package and state the tested BaseLib compatibility range in the description/requirements notes.
+
 ## Change Priorities
 
 When making feature changes, prefer this order:
@@ -92,6 +106,7 @@ When making feature changes, prefer this order:
 - Verification is primarily manual or build-based.
 - `SearingSwoopPatches.cs` is the main concentration point for technical debt.
 - Current config surface is smaller than the README roadmap suggests.
+- BaseLib GitHub releases may appear before matching NuGet package versions are available; dependency upgrades must follow NuGet availability for compile-time references.
 
 ## Done Criteria For Future Tasks
 
@@ -102,3 +117,4 @@ A change is not complete until all applicable items below are true:
 - Localization and card/relic descriptions still match actual gameplay.
 - Release or runtime asset paths still resolve correctly.
 - `PROGRESS.md` is updated if the task changes status, priorities, or known debt.
+- Any public release output is checked to ensure it does not include bundled BaseLib binaries.

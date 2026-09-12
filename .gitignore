@@ -1,2 +1,9 @@
 .DS_Store
 Thumbs.db
+
+# Local toolchains / runtimes (repo-local only)
+.tools/dotnet10/
+.tools/ilspycmd-local/
+
+# Local reverse-engineering workspace
+local-mod-study/

@@ -52,7 +52,7 @@
 2. 再把 `SearingSwoop` 解压后的文件夹放进游戏 `mods` 目录
 3. 启动游戏后同时启用 `BaseLib` 和 `SearingSwoop`
 
-## 发布（mac + win）
+## 发布（单包）
 
 发布前统一执行：
 
@@ -63,5 +63,4 @@ cd /Users/kairong/project/sts2-mods-by-kairong/SearingSwoop
 
 脚本会生成：
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6.zip`

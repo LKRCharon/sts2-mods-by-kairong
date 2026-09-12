@@ -28,7 +28,7 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - Fixed `Searing Swoop` description rendering to use dynamic vars (`{Damage:diff()}` and `{Repeat:diff()}`), so card text reflects live combat modifiers and current hit count.
 - Patched relic counter, title, description, and bird skin setup.
 - Added runtime portrait loading so custom portraits can be loaded from disk reliably.
-- Added release packaging script that emits zip bundles for mac/win using BaseLib 3.0.6.
+- Added release packaging script that emits a single cross-platform zip bundle using BaseLib 3.0.6.
 
 ## Partially Implemented Or Mismatched
 
@@ -58,8 +58,8 @@ This repo is positioned as a multi-mod `Slay the Spire 2` collection, but only `
 - There is no automated regression coverage.
   Manual in-game verification is still the main safety net.
 
-- Release packaging is labeled for `mac` and `win`, but the current script mostly packages the local build output into different bundle names.
-  Treat this as packaging convenience, not as fully validated cross-platform export.
+- Release packaging now defaults to a single cross-platform bundle.
+  Local-only BaseLib convenience bundles may still be created for direct friend sharing, but are not for public release uploads.
 
 ## Immediate Priorities
 

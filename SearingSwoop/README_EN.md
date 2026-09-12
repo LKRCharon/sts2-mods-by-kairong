@@ -52,7 +52,7 @@ A Slay the Spire 2 gameplay mod inspired by STS1 `Searing Blow`.
 2. Put the extracted `SearingSwoop` folder into the game's `mods` directory.
 3. Launch the game and enable both `BaseLib` and `SearingSwoop`.
 
-## Release (mac + win)
+## Release (Single Package)
 
 Before publishing:
 
@@ -63,5 +63,4 @@ cd /Users/kairong/project/sts2-mods-by-kairong/SearingSwoop
 
 The script outputs:
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6.zip`

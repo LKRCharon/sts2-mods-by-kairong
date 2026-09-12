@@ -29,7 +29,6 @@ MODS_SINK="${STAGE_ROOT}/_mods_sink/"
 BASELIB_MATRIX="${BASELIB_MATRIX:-3.0.6}"
 # shellcheck disable=SC2206
 BASELIB_VERSIONS=(${BASELIB_MATRIX})
-PLATFORMS=(mac win)
 RELEASE_FILES=()
 
 DLL_PATH="${PROJECT_DIR}/.godot/mono/temp/bin/${BUILD_CONFIG}/${MOD_ID}.dll"
@@ -60,9 +59,8 @@ build_one() {
 
 package_one() {
   local baselib_version="$1"
-  local platform="$2"
-  local stage_dir="${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}-${platform}/${MOD_ID}"
-  local zip_path="${DIST_ROOT}/${MOD_ID}-${VERSION}-baselib-${baselib_version}-${platform}.zip"
+  local stage_dir="${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}/${MOD_ID}"
+  local zip_path="${DIST_ROOT}/${MOD_ID}-${VERSION}-baselib-${baselib_version}.zip"
 
   if [[ ! -f "${DLL_PATH}" ]]; then
     echo "missing build output: ${DLL_PATH}" >&2
@@ -79,7 +77,7 @@ package_one() {
   fi
 
   (
-    cd "${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}-${platform}"
+    cd "${STAGE_ROOT}/${MOD_ID}-baselib-${baselib_version}"
     zip -qry "${zip_path}" "${MOD_ID}"
   )
 
@@ -90,9 +88,7 @@ package_one() {
 echo "[1/4] Building and packaging matrix"
 for baselib_version in "${BASELIB_VERSIONS[@]}"; do
   build_one "${baselib_version}"
-  for platform in "${PLATFORMS[@]}"; do
-    package_one "${baselib_version}" "${platform}"
-  done
+  package_one "${baselib_version}"
 done
 
 echo "[4/4] Done"

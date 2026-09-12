@@ -55,7 +55,7 @@ Project structure currently includes:
 - `_baselib/` (BaseLib source and docs mirror)
 - `_template/` (mod template resources)
 
-## Release Build (mac + win)
+## Release Build (Single Package)
 
 From the `SearingSwoop` directory:
 
@@ -65,8 +65,7 @@ From the `SearingSwoop` directory:
 
 It generates:
 
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-mac.zip`
-- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6-win.zip`
+- `dist/<version>/SearingSwoop-<version>-baselib-3.0.6.zip`
 
 ## Roadmap
 
